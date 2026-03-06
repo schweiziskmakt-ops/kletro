@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% block title %} {{ group.titel }} {% endblock %}
+
+{% block content %}
+<style>
+  .club-hero {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    min-height: 240px;
+    background: linear-gradient(135deg, #672083, #B548F6 25%, #6C88EC);
+  }
+
+  .club-hero h1 {
+    font-size: 3rem;      
+    line-height: 1.15;
+
+
+  }
+
+  .club-hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(1200px 500px at 20% 10%, rgba(255,255,255,.12), transparent 60%),
+                linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.15) 55%, rgba(0,0,0,.05));
+    pointer-events:none;
+  }
+  .club-hero-bg {
+    position:absolute; inset:0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.03);
+    filter: saturate(1.05) contrast(1.05);
+  }
+  .club-hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 1.25rem;
+  }
+  @media (min-width: 768px){
+    .club-hero-content { padding: 2rem; }
+    .club-hero { min-height: 300px; }
+  }
+
+  .club-avatar {
+    width: 64px; height: 64px;
+    border-radius: 18px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight: 800; font-size: 1.5rem;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #fff;
+    backdrop-filter: blur(8px);
+  }
+
+  .stat-pill {
+    display:inline-flex; align-items:center; gap:.5rem;
+    padding: .45rem .75rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #fff;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+    font-size: 1.4rem;
+  }
+
+  .club-card {
+    border-radius: 1.25rem;
+  }
+
+  .sticky-actions {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .btn-join {
+    border-radius: 999px;
+    font-weight: 700;
+    padding: .8rem 1.1rem;
+  }
+
+  .muted-link a { color: inherit; text-decoration: none; }
+  .muted-link a:hover { text-decoration: underline; }
+
+    .members-scroll{
+    max-height: 420px;
+    overflow: auto;
+    }
+    .club-thumb-wrap{
+    width: 100px;          /* bigger */
+    height: 90px;         /* bigger */
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    .club-thumb{
+    width: 100%;
+    height: 100%;
+    padding: 10px; 
+    object-fit: scale-down;        /* nice breathing room */
+    }
+
+
+
+</style>
+
+<div class="container py-4">
+
+  {# HERO / COVER #}
+  <div class="club-hero shadow-sm mb-4">
+   
+
+    <div class="club-hero-content">
+      <div class="d-flex flex-column flex-md-row gap-3 justify-content-between align-items-start">
+
+        <div class="d-flex gap-3 align-items-start">
+          <div class="text-white ">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+              <h1 class="h3 h2-md mb-0 fw-bold">{{ group.titel }}</h1>
+  {% if group.image_filename %}
+  <div class="club-thumb-wrap">
+    <img class="club-thumb"
+         src="{{ url_for('static', filename='uploads/' ~ group.image_filename) }}"
+         alt="Gruppbild">
+  </div>
+{% endif %}
+              
+            </div>
+
+            <div class="mt-2 d-flex flex-wrap gap-2">
+              <span class="stat-pill"> {{ member_count }} medlemmar</span>
+              <span class="stat-pill"> Skapad av {{ group.author_username }}</span>
+
+              {% if group.privacy %}
+                <span class="stat-pill">
+                  {% if group.privacy == 'public' %} Offentlig{% else %} Privat{% endif %}
+                </span>
+              {% endif %}
+            </div>
+
+            {# Om du har en website-kolumn i groups: group.website #}
+            {# <div class="mt-2 text-white-50 muted-link">🔗 <a href="{{ group.website }}" target="_blank" rel="noopener">Webbplats</a></div> #}
+          </div>
+        </div>
+
+        {# ACTIONS #}
+        <div class="w-100 w-md-auto">
+          {% if not is_member %}
+  <form action="{{ url_for('groups_join', group_id=group.id) }}" method="post" class="d-inline-block">
+    <button class="btn btn-danger btn-join btn-lg shadow-sm" type="submit">
+      Gå med i gruppen
+    </button>
+  </form>
+{% else %}
+  <span class="badge text-bg-success rounded-pill px-3 py-2">
+    <h4>Du är medlem</h4>
+  </span>
+{% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 h3">
+    {# MAIN #}
+    <div class="col-12 col-lg-8">
+      <div class="card club-card shadow-sm border-0">
+        <div class="card-body p-4">
+
+          {# STRAVA-LIKNANDE TABS #}
+          <ul class="nav nav-pills gap-2 mb-4" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active rounded-pill px-3" data-bs-toggle="pill" data-bs-target="#tab-about" type="button" role="tab">
+                Om
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3" data-bs-toggle="pill" data-bs-target="#tab-activity" type="button" role="tab">
+                Aktivitet
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill px-3" data-bs-toggle="pill" data-bs-target="#tab-members" type="button" role="tab">
+                Medlemmar
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-about" role="tabpanel">
+              {% if group.content %}
+                <h2 class="fw-bold mb-2">Beskrivning</h2>
+                <h2 class="text-secondary mb-0" style="white-space: pre-wrap;">{{ group.content }}</h2>
+              {% else %}
+                <h2 class="text-secondary mb-0">Ingen beskrivning ännu.</h2>
+              {% endif %}
+            </div>
+
+            <div class="tab-pane fade" id="tab-activity" role="tabpanel">
+              <div class="text-secondary">
+                <div class="d-flex align-items-center gap-2 mb-2 h2">
+                  <span class="badge text-bg-light border"></span>
+                  <strong>Senaste aktivitet</strong>
+                </div>
+                <p class="mb-0">
+                </p>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-members" role="tabpanel">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="mb-0"><strong>{{ member_count }}</strong> medlemmar totalt</h2>
+  </div>
+
+  {% if members and members|length > 0 %}
+    <div class="members-scroll">
+      <div class="list-group list-group-flush">
+        {% for m in members %}
+          <div class="list-group-item d-flex align-items-center gap-3 py-3">
+            <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center"
+                 style="width:52px;height:52px;font-weight:800;font-size:1.25rem;">
+              {{ m.username[:1]|upper }}
+            </div>
+
+            <div class="flex-grow-1">
+              <div class="fw-semibold" style="font-size:1.25rem;">{{ m.username }}</div>
+              <div class="text-secondary" style="font-size:1rem;">Medlem</div>
+            </div>
+
+            <a class="btn btn-sm btn-outline-secondary rounded-pill"
+               href="{{ url_for('user_posts', username=m.username) }}">
+              Visa profil
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <p class="text-secondary mb-0">Inga medlemmar ännu.</p>
+  {% endif %}
+</div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    {# SIDEBAR #}
+    <div class="col-12 col-lg-4">
+      <div class="sticky-actions">
+        <div class="card club-card shadow-sm border-0">
+          <div class="card-body p-4">
+            <h3 class="h6 fw-bold mb-3">Snabbinfo</h3>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-secondary">Medlemmar</span>
+              <span class="fw-semibold">{{ member_count }}</span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-secondary">Skapad av</span>
+              <span class="fw-semibold">{{ group.author_username }}</span>
+            </div>
+
+            {% if group.privacy %}
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-secondary">Sekretess</span>
+                <span class="fw-semibold">
+                  {% if group.privacy == 'public' %}Offentlig{% else %}Privat{% endif %}
+                </span>
+              </div>
+            {% endif %}
+
+            <hr class="my-3">
+
+            <div class="small text-secondary">
+              Tips: Lägg till “events” eller “leaderboard” här när du har datan.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

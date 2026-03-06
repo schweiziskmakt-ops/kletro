@@ -1,0 +1,110 @@
+
+
+{% extends 'base.html' %}
+{% block title %} Create Boulder{% endblock %}
+
+{% block content %}
+<div class="container mt-5 fs-3 mb-3">
+<form action="{{ url_for('create_post') }}"
+      method="post"
+      enctype="multipart/form-data"
+      class="p-5 rounded-4 shadow glass"><div class="card border-0 p-5 shadow-sm rounded-4"><div class="mb-3">
+            <a class="btn btn-primary btn-glow disabled " href="#" role="button" aria-disabled="true">Bouldering</a>
+            <a class="btn btn-primary btn-glow" href="createlead" role="button">Ledklättring</a>
+            <br>
+            <label for="" class="display-1">Titel</label>
+            <input type="text" class="form-control form-control-lg" id="titel" name="titel" placeholder="titel...">
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label fw-bold">Beskrivning</label>
+            <input type="text" class="form-control form-control-lg" id="content" name="content" placeholder="Beskriv här..."  required>
+        </div>
+       <label for="grades">Välj svårighetsgrad:</label>
+    <select id="grades" name="grades">
+    <option value="grön">Grön</option>
+    <option value="blå">Blå</option>
+    <option value="röd">Röd</option>
+    <option value="svart">Svart</option>
+    <option value="vit">Vit</option>
+    <option value="silver">Silver</option>
+
+    </select>
+    <br>
+    <br>
+    <label for="image-upload" class="image-upload-box mb-4">
+    <div class="upload-content text-center">
+        <div class="upload-icon mb-3">
+            📷
+        </div>
+        <div class="upload-text">
+            Click here to add or update an image
+        </div>
+    </div>
+</label>
+
+<input 
+    type="file" 
+    id="image-upload"
+    name="image" 
+    accept="image/*"
+    class="d-none"
+>
+
+                    <button type="submit" class="btn btn-primary btn-glow btn-lg mt-3">Publicera</button>
+
+          </div>
+    </form>
+    </div>
+</div> 
+
+<style>
+.image-upload-box {
+    display: block;
+    width: 100%;
+    height: 260px;
+    border: 2px solid #000000;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #fff;
+}
+
+.image-upload-box:hover {
+    background-color: #efefef;
+}
+
+.upload-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #676f77;
+    font-size: 1.2rem;
+}
+
+.upload-icon {
+    font-size: 4rem;
+}
+
+.upload-text {
+    font-weight: 500;
+}</style>
+<script>
+document.getElementById('image-upload').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        document.querySelector('.image-upload-box').style.backgroundImage =
+            `url(${event.target.result})`;
+        document.querySelector('.image-upload-box').style.backgroundSize = 'cover';
+        document.querySelector('.image-upload-box').style.backgroundPosition = 'center';
+        document.querySelector('.upload-content').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+});
+</script>
+
+{% endblock %}

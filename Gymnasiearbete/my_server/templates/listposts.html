@@ -1,0 +1,154 @@
+{%extends 'base.html'%}
+{% block title %} {{ user.username }} {% endblock %}
+
+{% block content %}
+
+<div class="container p-5 rounded-4 bg-light" style="min-height: 50vh;">
+
+  <div class="row align-items-center g-4">
+
+    <div class="col-12 col-md-4 d-flex justify-content-center">
+      <div class="rounded-circle" style="
+          width: 140px;
+          height: 140px;
+          background-color: #ccc;
+          background-image: url('https://via.placeholder.com/200');
+          background-size: cover;
+          background-position: center;
+        ">
+      </div>
+    </div>
+
+    <div class="col-12 col-md-8 text-center text-md-start">
+      <h2 class="mb-2">{{ user.username }}</h2>
+
+      <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-4 mb-3">
+        <div class="text-center text-md-start">
+          <strong class="fs-5">0</strong><br>
+          <small class="text-muted">Friends</small>
+        </div>
+        <div class="text-center text-md-start">
+          <strong class="fs-5">0</strong><br>
+          <small class="text-muted">Followers</small>
+        </div>
+      </div>
+
+      <div class="d-grid d-md-block">
+        {% if user['id'] != session['user_id'] %}
+        {% if not relation %}
+        <form method="post" action="{{ url_for('friend_request', user_id=user['id']) }}">
+          <button class="btn btn-primary btn-sm rounded-4">Lägg till vän</button>
+        </form>
+
+        {% elif relation['status'] == 'pending' and relation['requested_by'] == session['user_id'] %}
+        <form method="post" action="{{ url_for('friend_remove', user_id=user['id']) }}">
+          <button class="btn btn-outline-secondary btn-sm rounded-4">Förfrågan skickad (Avbryt)</button>
+        </form>
+
+        {% elif relation['status'] == 'pending' and relation['requested_by'] != session['user_id'] %}
+        <form method="post" action="{{ url_for('friend_accept', user_id=user['id']) }}" class="d-inline">
+          <button class="btn btn-success btn-sm rounded-4">Acceptera</button>
+        </form>
+        <form method="post" action="{{ url_for('friend_remove', user_id=user['id']) }}" class="d-inline">
+          <button class="btn btn-outline-danger btn-sm rounded-4">Avslå</button>
+        </form>
+
+        {% elif relation['status'] == 'accepted' %}
+        <form method="post" action="{{ url_for('friend_remove', user_id=user['id']) }}">
+          <button class="btn btn-outline-danger btn-sm rounded-4">Ta bort vän</button>
+        </form>
+        {% endif %}
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container d-flex justify-content-center text-white mt-5">
+  <h1>Inlägg av {{ user.username }}</h1>
+</div>
+{% if posts %}
+  <div class="container px-2 px-md-0" style="max-width: 1180px;">
+    {% for post in posts %}
+      {% set grade = post.grades|lower %}
+
+      <div class="glass rounded-5 p-3 p-md-4 mt-4">
+        <div class="row g-0 align-items-stretch">
+
+          <div class="col-md-6">
+            <div class="bg-light rounded-start-5 p-4 h-100 text-start d-flex flex-column"
+                 style="min-height: 460px;">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center"
+                       style="width:44px;height:44px;">
+                    <span class="fw-bold fs-4"></span>
+                  </div>
+
+                  <a class="text-decoration-none text-dark fw-semibold"
+                     style="font-size: 2rem;"
+                     href="{{ url_for('user_posts', username=post['author_username']) }}">
+                    {{ post['author_username'] }}
+                  </a>
+                </div>
+
+                <span class="badge rounded-pill px-3 py-2 fs-5
+                  {% if grade == 'grön' %}bg-success
+                  {% elif grade == 'blå' %}bg-primary
+                  {% elif grade == 'röd' %}bg-danger
+                  {% elif grade == 'svart' %}bg-dark
+                  {% elif grade == 'vit' %}bg-light text-dark border
+                  {% elif grade == 'silver' %}bg-secondary
+                  {% else %}bg-secondary
+                  {% endif %}">
+                  {{ post.grades }}
+                </span>
+              </div>
+
+              <h2 class="mb-3" style="font-size: 3rem; line-height: 0.9;">
+                {{ post.titel }}
+              </h2>
+
+              <p class="fs-2 text-body-secondary mb-0" style="line-height: 1.05;">
+                {{ post.content }}
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="bg-dark rounded-end-5 overflow-hidden h-100 d-flex align-items-center justify-content-center"
+                 style="min-height: 460px;">
+              {% if post.image_filename %}
+  <div class="ratio ratio-1x1 w-100 position-relative">
+
+    <img
+      src="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}"
+      alt=""
+      class="position-absolute top-0 start-0 w-100 h-100"
+      style="object-fit: cover; filter: blur(18px); transform: scale(1.15); opacity: 0.6;">
+
+    <img
+      src="{{ url_for('static', filename='uploads/' ~ post.image_filename) }}"
+      alt="Post image"
+      class="position-absolute top-0 start-0 w-100 h-100"
+      style="object-fit: contain;">
+  </div>
+{% else %}
+  <div class="text-white-50 fs-2">No image</div>
+{% endif %}
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    {% endfor %}
+  </div>
+{% endif %}
+<br>
+<a class=" btn btn-secondary mt-3 p-3" href="{{ url_for('list_users') }}">Tillbaka</a>
+{% endblock %}

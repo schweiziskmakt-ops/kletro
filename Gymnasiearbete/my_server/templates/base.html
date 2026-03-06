@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Kletro - {% block title %} {% endblock %}</title>
+    <link rel="shortcut icon" href="{{url_for('static', filename ='logo3.png')}}" type="image/x-icon">
+</head>
+
+<style>
+    body,
+    html {
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    p, div, span {
+        font-size: x-large;
+    }
+
+    .glass {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-glow:hover {
+        box-shadow: 0 0 15px rgba(38, 165, 255, 0.8);
+        transform: translateY(-3px);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-glow-red:hover {
+        box-shadow: 0 0 15px rgba(255, 38, 38, 0.8);
+        transform: translateY(-3px);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-glow-green:hover {
+        box-shadow: 0 0 15px rgba(85, 255, 38, 0.8);
+        transform: translateY(-3px);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .gradient-custom {
+        background: linear-gradient(to right, #c6a84f, #f5d776, #b8860b);
+    }
+
+    .button-custom {
+        background: linear-gradient(to right, #c6a84f, #f5d776, #b8860b);
+    }
+
+    .bg-image {
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        background-image: url("/static/bghome.png");
+    }
+
+    .bg-profile {
+        background-image: url("/static/profilebackground.jpg");
+    }
+
+    /* Make navbar transparent by default */
+    .navbar {
+        background-color: transparent !important;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Navbar hover: light background */
+    .navbar:hover {
+        background-color: rgb(248, 249, 250) !important; 
+    }
+
+    /* Buttons and links inside navbar */
+    .navbar .btn,
+    .navbar a {
+        position: relative;
+        background-color: transparent !important; /* force transparent */
+        color: #fff !important;                   /* white text by default */
+        border: none !important;                  /* remove borders */
+        box-shadow: none !important;
+        transition: color 0.3s ease, background-color 0.3s ease;
+        padding: 5px 10px;
+    }
+
+    /* Dot under buttons/links */
+    .navbar .btn::after,
+    .navbar a::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background-color: transparent;
+        border-radius: 50%;
+        transition: background-color 0.3s;
+    }
+
+    /* Show dot on hover or active */
+    .navbar .btn:hover::after,
+    .navbar .btn.active::after,
+    .navbar a:hover::after,
+    .navbar a.active::after {
+        background-color: #000000; /* dot color */
+    }
+
+    /* Text becomes black when navbar is hovered */
+    .navbar:hover .btn,
+    .navbar:hover a {
+        color: #000 !important; /* black text on light background */
+    }
+
+    .navbar .btn svg {
+    width: 1.5em; /* Justera storlek */ 
+    height: 1.5em; /* Justera storlek */
+    margin-right: 0.5em; /* Utrymme mellan SVG och text */
+}
+.icon {
+    transition: stroke 0.3s ease;
+}
+
+.icon:hover {
+    stroke: #007bff; /* Change color on hover */
+}
+
+/* Remove dot for profile button */
+.navbar .profile-btn::after {
+    content: none; /* disables the dot */
+}
+</style>
+
+<body class="d-flex flex-column min-vh-100">
+    <div class="bg-image {% block bg_class %}{% endblock %}">
+        <nav class="navbar mx-auto">
+            <div class="container-fluid">
+                <a class="navbar-brand fs-3" href="{{ url_for('home') }}">
+                    Kletro
+                </a>
+
+                {% if session.get('logged_in') %}
+                <a class="btn fs-5" href="{{url_for('create_post')}}">Skapa post</a>
+                <a class="btn fs-5" href="{{url_for('list_users')}}">Socialt</a>
+                <a class="btn fs-5 me-1 profile-btn" href="{{ url_for('profil') }}">
+                    <!-- Example SVG: user icon -->
+<svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-user" viewBox="0 0 192 192" width="24" height="24" fill="none">
+    <path d="M96 168c39.765 0 72-32.235 72-72 0-39.764-32.235-72-72-72-39.764 0-72 32.236-72 72 0 39.765 32.236 72 72 72Z" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M96 120c16.569 0 30-13.431 30-30 0-16.569-13.431-30-30-30-16.569 0-30 13.431-30 30 0 16.569 13.431 30 30 30Z" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M47.85 149.55a54.002 54.002 0 0 1 76.399-21.577 54.005 54.005 0 0 1 19.901 21.577" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>                </a>
+                <a class="btn rounded-3 fs-5 me-2" href="{{ url_for('logout') }}">Logga ut</a>
+                {% else %}
+                <a class="btn rounded-3 fs-5 me-2" href="{{ url_for('sign_up') }}">Sign up</a>
+                <a class="btn rounded-3 fs-5 me-2" href="{{ url_for('login') }}">Logga in</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <header>
+            {% block headline %}{% endblock %}
+        </header>
+        <section class="content mt-5">
+            {% block content %}
+            {% endblock %}
+        </section>
+    </div>
+
+    <div class="container">
+        <footer class="mt-auto py-4 fs-3">
+            <div class="container">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+                    <li class="nav-item"><a href="{{url_for('about')}}" class="nav-link px-2 text-body-secondary">About</a></li>
+                </ul>
+                <p class="text-center text-body-secondary">© 2026 Kletro AB</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+</html>

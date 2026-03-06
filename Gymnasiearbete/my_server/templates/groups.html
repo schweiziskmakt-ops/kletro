@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %} Groups {% endblock %}
+
+{% block content %}
+
+<div class="container p-5 rounded-4 glass mb-5" style="min-height: 50vh;">
+  <div class="container p-3 bg-light rounded-4" style="min-height: 35vh;">
+
+    <a class="btn btn-warning fs-3" href="creategroup" role="button">Skapa en grupp här!</a>
+
+    <div class="row g-4 mt-2">
+  {% for groups in groups %}
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <div class="card h-100 border border-dark border-2">
+        {% if groups.image_filename %}
+          <img src="{{ url_for('static', filename='uploads/' ~ groups.image_filename) }}" class="card-img-top img-fluid" alt="groups image">
+        {% endif %}
+        <div class="card-body">
+          <h1 class="card-title">{{ groups.titel }}</h1>
+          <p class="card-text">{{ groups.content }}</p>
+          <a href="{{url_for('group_page', group_id=groups.id)}}" class="btn btn-warning">Gå med här!</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+    </div>
+</div>
+{% endblock %}

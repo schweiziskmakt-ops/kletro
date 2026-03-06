@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} Start {% endblock %}
+
+{%block content %}
+<div class="container p-5 text-center rounded-4 glass" style="min-height: 50vh;">
+  <div class="container gradient-custom p-3 bg-light rounded-4" style="min-height: 35vh;">
+    <h1 class="display-1">Välkommen till Kletro</h1>
+    {% if session.get('logged_in') %}
+    <a href="{{ url_for('logout') }}" class="btn btn-danger border border-dark p-4 rounded-4 btn-glow"
+      style="min-width: 15vw;">
+      <h4>Logga ut</h4>
+    </a>
+    {% else %}
+    <a href="{{ url_for('sign_up') }}" class="btn btn-light border border-dark p-4 rounded-4 btn-glow"
+      style="min-width: 15vw;">
+      <h4>Sign up</h4>
+    </a>
+    {% endif %}
+    <a href="{{ url_for('home') }}" class="btn btn-light border border-dark p-4 rounded-4 btn-glow ms-5"
+      style="min-width: 15vw;">
+      <h4>Se alla inlägg</h4>
+    </a>
+  </div>
+   
+</div>
+{%endblock%}

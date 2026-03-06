@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %} About Us {% endblock %}
+{% block content %}
+
+<style>
+  .about-section {
+  max-width: 80%;
+  margin: auto;
+}
+
+.about-section h2 {
+  font-weight: 800;
+  font-size: 2.2rem;
+}
+
+.about-section p {
+  font-size: 1.4rem;
+  line-height: 1.8;
+}
+.hero-hero {
+  background-image: url('/static/bg.jpg'); /* replace with your image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  color: white;
+}
+
+/* Optional: add a dark overlay for readability */
+.hero-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.45); /* adjust opacity */
+  border-radius: 1rem; /* matches your container */
+}
+
+.hero-hero > .container {
+  position: relative; /* ensures text is above overlay */
+  z-index: 1;
+}
+</style>
+
+<div class="hero-hero container p-5 rounded-4 about-section" style="min-height: 80vh;">
+  <div class="container py-5 rounded-4">
+    <h1 class="display-3 fw-bold">Kletro</h1>
+    <p class=" mt-3">
+      Klättring handlar inte bara om att nå toppen.  
+      Det handlar om progression, gemenskap och känslan av att bli lite bättre varje pass.
+    </p>
+  </div>
+</div>
+<div class="container py-5 text-start about-section bg-white">
+
+  <h2 class="fw-bold mb-3">Vår idé</h2>
+  <p>
+    Kletro skapades ur en enkel tanke: klättring blir roligare när man delar den.
+    Vi saknade ett enkelt sätt att dokumentera våra klätterpass,
+    se vår utveckling och inspireras av andra klättrare.
+  </p>
+
+  <h2 class="fw-bold mt-5 mb-3">Vårt mål</h2>
+  <p>
+    Vårt mål är att skapa en plattform där klättrare kan följa sin progression,
+    hitta motivation och känna gemenskap med andra i sporten.
+  </p>
+
+  <h2 class="fw-bold mt-5 mb-3">Våra värderingar</h2>
+  <ul>
+    <li>Respekt för alla klättrare</li>
+    <li>Trygg och inkluderande gemenskap</li>
+    <li>Utveckling – varje klätterpass räknas</li>
+  </ul>
+
+</div>
+<div class="container py-5 about-section bg-white mb-5">
+  <h2 class="fw-bold text-center mb-4">Hur det började</h2>
+
+  <div class="row text-center">
+
+    <div class="col-md-4">
+      <h3>2025</h3>
+      <p>Idén till Kletro föddes när vi saknade ett enkelt sätt att logga våra klätterpass.</p>
+    </div>
+
+    <div class="col-md-4">
+      <h3>2026</h3>
+      <p>Den första versionen av plattformen byggdes som en del av webbserverkursen.</p>
+    </div>
+
+    <div class="col-md-4">
+      <h3>Nu</h3>
+      <p>Vi fortsätter utveckla Kletro för att hjälpa klättrare dela och utvecklas.</p>
+    </div>
+
+  </div>
+</div>
+</div>
+<br>
+
+{% endblock %}
